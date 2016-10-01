@@ -22,7 +22,7 @@ defmodule Mix.Tasks.Hex.KeyTest do
       Hex.State.put(:home, System.cwd!)
 
       auth_a = HexTest.HexWeb.new_user("remove_key", "remove_key@mail.com", "password", "remove_key_a")
-      auth_b = HexTest.HexWeb.new_key("remove_key", "password", "remove_key_b")
+      auth_b = HexTest.HexWeb.new_key("remove_key@example.com", "password", "remove_key_b")
       Hex.Config.update(auth_a)
 
       assert {200, _, _} = Hex.API.Key.get(auth_a)
@@ -43,7 +43,7 @@ defmodule Mix.Tasks.Hex.KeyTest do
       assert {401, _, _} = Hex.API.Key.get(auth_a)
 
       config = Hex.Config.read
-      refute config[:username]
+      refute config[:email_or_username]
       refute config[:key]
       refute config[:encrypted_key]
     end
@@ -54,7 +54,7 @@ defmodule Mix.Tasks.Hex.KeyTest do
       Hex.State.put(:home, System.cwd!)
 
       auth_a = HexTest.HexWeb.new_user("remove_all_keys", "remove_all_keys@mail.com", "password", "remove_all_keys_a")
-      auth_b = HexTest.HexWeb.new_key("remove_all_keys", "password", "remove_all_keys_b")
+      auth_b = HexTest.HexWeb.new_key("remove_all_keys@example.com", "password", "remove_all_keys_b")
       Hex.Config.update(auth_a)
 
       assert {200, _, _} = Hex.API.Key.get(auth_a)

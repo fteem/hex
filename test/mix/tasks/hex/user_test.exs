@@ -22,7 +22,7 @@ defmodule Mix.Tasks.Hex.UserTest do
     Mix.Tasks.Hex.User.run(["register"])
 
     auth = get_auth("eric", "hunter42")
-    assert {200, body, _} = Hex.API.User.get("eric", auth)
+    assert {200, body, _} = Hex.API.User.get("mail@mail.com", auth)
     assert body["email"] == "mail@mail.com"
   end
 
@@ -30,7 +30,7 @@ defmodule Mix.Tasks.Hex.UserTest do
     in_tmp fn ->
       Hex.State.put(:home, System.cwd!)
 
-      send self(), {:mix_shell_input, :prompt, "user"}
+      send self(), {:mix_shell_input, :prompt, "mail@mail.com"}
       send self(), {:mix_shell_input, :prompt, "hunter42"}
       Mix.Tasks.Hex.User.run(["auth"])
 
@@ -43,7 +43,7 @@ defmodule Mix.Tasks.Hex.UserTest do
       assert {200, body, _} = Hex.API.Key.get(auth)
       assert name in Enum.map(body, &(&1["name"]))
 
-      assert config[:username] == "user"
+      assert config[:email_or_username] == "mail@mail.com"
       assert config[:encrypted_key]
     end
   end
@@ -52,7 +52,7 @@ defmodule Mix.Tasks.Hex.UserTest do
     in_tmp fn ->
       Hex.State.put(:home, System.cwd!)
 
-      Hex.Config.update(username: "johndoe", key: "qwertyuiop",
+      Hex.Config.update(email_or_username: "johndoe@mail.com", key: "qwertyuiop",
                         encrypted_key: "...",
                         xyz: "other", foo: :bar)
       Mix.Tasks.Hex.User.run(["deauth"])
@@ -126,7 +126,7 @@ defmodule Mix.Tasks.Hex.UserTest do
       Mix.Tasks.Hex.User.run(["register"])
 
       config = Hex.Config.read
-      assert config[:username] == "config"
+      assert config[:email_or_username] == "config@mail.com"
       assert is_binary(config[:encrypted_key])
     end
   end
@@ -134,10 +134,10 @@ defmodule Mix.Tasks.Hex.UserTest do
   test "whoami" do
     in_tmp fn ->
       Hex.State.put(:home, System.cwd!)
-      Hex.Config.update([username: "ausername"])
+      Hex.Config.update([email_or_username: "some@email.com"])
 
       Mix.Tasks.Hex.User.run(["whoami"])
-      assert_received {:mix_shell, :info, ["ausername"]}
+      assert_received {:mix_shell, :info, ["some@email.com"]}
     end
   end
 end

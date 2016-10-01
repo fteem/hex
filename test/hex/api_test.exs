@@ -6,12 +6,12 @@ defmodule Hex.APITest do
     assert {401, _, _} = Hex.API.User.get("test_user", [key: "something wrong"])
     assert {201, _, _} = Hex.API.User.new("test_user", "test_user@mail.com", "hunter42")
 
-    auth = HexTest.HexWeb.new_key([user: "test_user", pass: "hunter42"])
-    assert {200, %{"username" => "test_user"}, _} = Hex.API.User.get("test_user", auth)
+    auth = HexTest.HexWeb.new_key([email: "test_user@mail.com", pass: "hunter42"])
+    assert {200, %{"email" => "test_user@mail.com"}, _} = Hex.API.User.get("test_user", auth)
   end
 
   test "release" do
-    auth = HexTest.HexWeb.new_key([user: "user", pass: "hunter42"])
+    auth = HexTest.HexWeb.new_key([email: "user@mail.com", pass: "hunter42"])
 
     meta = %{name: :pear, app: :pear, version: "0.0.1", build_tools: ["mix"], requirements: [], licenses: ["MIT"], description: "pear"}
     {tar, _checksum} = Hex.Tar.create(meta, [])
@@ -32,7 +32,7 @@ defmodule Hex.APITest do
   end
 
   test "docs" do
-    auth = HexTest.HexWeb.new_key([user: "user", pass: "hunter42"])
+    auth = HexTest.HexWeb.new_key([email: "user@mail.com", pass: "hunter42"])
 
     meta = %{name: :tangerine, app: :tangerine, version: "0.0.1", build_tools: ["mix"], requirements: [], licenses: ["MIT"], description: "tangerine"}
     {tar, _checksum} = Hex.Tar.create(meta, [])
@@ -54,7 +54,7 @@ defmodule Hex.APITest do
   end
 
   test "keys" do
-    auth = [user: "user", pass: "hunter42"]
+    auth = [email: "user@mail.com", pass: "hunter42"]
 
     assert {201, %{"secret" => key_a}, _} = Hex.API.Key.new("key_a", auth)
     assert {201, %{"secret" => key_b}, _} = Hex.API.Key.new("key_b", auth)
@@ -73,7 +73,7 @@ defmodule Hex.APITest do
     assert {401, _, _} = Hex.API.Key.get(auth)
 
     # Delete all keys
-    auth = [user: "user", pass: "hunter42"]
+    auth = [email: "user@mail.com", pass: "hunter42"]
     assert {201, %{"secret" => key_c}, _} = Hex.API.Key.new("key_c", auth)
     assert {201, %{"secret" => key_d}, _} = Hex.API.Key.new("key_d", auth)
     assert byte_size(key_c) == 32
@@ -93,7 +93,7 @@ defmodule Hex.APITest do
   end
 
   test "owners" do
-    auth = HexTest.HexWeb.new_key([user: "user", pass: "hunter42"])
+    auth = HexTest.HexWeb.new_key([email: "user@mail.com", pass: "hunter42"])
 
     HexTest.HexWeb.new_package("orange", "0.0.1", %{}, %{}, auth)
     Hex.API.User.new("orange_user", "orange_user@mail.com", "hunter42")

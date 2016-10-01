@@ -1,8 +1,8 @@
 defmodule Hex.API.User do
   alias Hex.API
 
-  def get(username, auth) do
-    API.request(:get, API.api_url("users/#{username}"), API.auth(auth))
+  def get(username_or_email, auth) do
+    API.request(:get, API.api_url("users/#{username_or_email}"), API.auth(auth))
   end
 
   def new(username, email, password) do
@@ -10,7 +10,7 @@ defmodule Hex.API.User do
             %{username: username, email: email, password: password})
   end
 
-  def password_reset(name) do
-    API.request(:post, API.api_url("/users/#{name}/reset"), [], %{})
+  def password_reset(user_or_email) do
+    API.request(:post, API.api_url("/users/#{user_or_email}/reset"), [], %{})
   end
 end

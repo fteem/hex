@@ -169,13 +169,13 @@ defmodule HexTest.Case do
       {:beta, "1.1.0-beta", []}]
   end
 
-  def setup_auth(username, password) do
-    {201, body, _} = Hex.API.Key.new("setup_auth", [user: username, pass: password])
+  def setup_auth(email, password) do
+    {201, body, _} = Hex.API.Key.new("setup_auth", [email: email, pass: password])
     Mix.Hex.Utils.persist_key(password, body["secret"])
   end
 
-  def get_auth(username, password) do
-    {201, body, _} = Hex.API.Key.new("setup_auth", [user: username, pass: password])
+  def get_auth(email, password) do
+    {201, body, _} = Hex.API.Key.new("setup_auth", [email: email, pass: password])
     [key: body["secret"]]
   end
 

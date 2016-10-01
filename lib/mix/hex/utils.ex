@@ -36,17 +36,18 @@ defmodule Mix.Hex.Utils do
     end)
   end
 
-  def generate_key(username, password) do
+  def generate_key(email, password) do
     Hex.Shell.info("Generating API key...")
     {:ok, name} = :inet.gethostname()
     name = List.to_string(name)
 
-    case Hex.API.Key.new(name, [user: username, pass: password]) do
+    case Hex.API.Key.new(name, [email: email, pass: password]) do
       {201, body, _} ->
         Hex.Shell.info("Encrypting API key with user password...")
         encrypted_key = Hex.Crypto.encrypt(body["secret"], password, @apikey_tag)
+
         Hex.Config.update([
-          username: username,
+          email_or_username: email,
           encrypted_key: encrypted_key])
 
       {code, body, _} ->
@@ -56,6 +57,7 @@ defmodule Mix.Hex.Utils do
   end
 
   def auth_info(config) do
+    IO.inspect(config)
     cond do
       encrypted_key = config[:encrypted_key] ->
         [key: decrypt_key(encrypted_key)]

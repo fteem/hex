@@ -157,7 +157,7 @@ defmodule Hex.API do
     if key = opts[:key] do
       %{'authorization' => String.to_char_list(key)}
     else
-      base64 = :base64.encode_to_string(opts[:user] <> ":" <> opts[:pass])
+      base64 = :base64.encode_to_string(opts[:email_or_username] <> ":" <> opts[:pass])
       %{'authorization' => 'Basic ' ++ base64}
     end
   end

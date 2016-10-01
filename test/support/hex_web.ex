@@ -85,6 +85,7 @@ defmodule HexTest.HexWeb do
         receive do
           {^port, {:data, data}} ->
             IO.ANSI.format([:blue, data]) |> IO.write
+            IO.inspect(data)
             fun.(fun)
           {^port, {:exit_status, status}} ->
             IO.puts "HexWeb quit with status #{status}"
@@ -182,8 +183,8 @@ defmodule HexTest.HexWeb do
 
   def new_user(username, email, password, key) do
     {201, _, _} = Hex.API.User.new(username, email, password)
-    {201, %{"secret" => secret}, _} = Hex.API.Key.new(key, [user: username, pass: password])
-    [username: username, key: secret] ++ Mix.Hex.Utils.generate_encrypted_key(password, secret)
+    {201, %{"secret" => secret}, _} = Hex.API.Key.new(key, [email_or_username: email, pass: password])
+    [email_or_username: email, key: secret] ++ Mix.Hex.Utils.generate_encrypted_key(password, secret)
   end
 
   def new_key(auth) do
@@ -191,9 +192,9 @@ defmodule HexTest.HexWeb do
     [key: secret]
   end
 
-  def new_key(username, password, key) do
-    {201, %{"secret" => secret}, _} = Hex.API.Key.new(key, [user: username, pass: password])
-    [username: username, key: secret] ++ Mix.Hex.Utils.generate_encrypted_key(password, secret)
+  def new_key(email, password, key) do
+    {201, %{"secret" => secret}, _} = Hex.API.Key.new(key, [email: email, pass: password])
+    [email: email, key: secret] ++ Mix.Hex.Utils.generate_encrypted_key(password, secret)
   end
 
   def new_package(name, version, deps, meta, auth) do

@@ -100,8 +100,8 @@ defmodule Mix.Tasks.Hex.Owner do
   end
 
   def list_owned_packages(config, auth) do
-    {:ok, username} = Keyword.fetch(config, :username)
-    case Hex.API.User.get(username, auth) do
+    {:ok, email} = Keyword.fetch(config, :email)
+    case Hex.API.User.get(email, auth) do
       {code, body, _headers} when code in 200..299 ->
         Enum.each(body["owned_packages"], fn({name, url}) ->
           Hex.Shell.info("#{name} - #{url}")

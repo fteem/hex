@@ -37,7 +37,7 @@ defmodule Mix.Tasks.Hex.PublishTest do
 
     in_tmp fn ->
       Hex.State.put(:home, tmp_path())
-      setup_auth("user", "hunter42")
+      setup_auth("user@example.com", "hunter42")
 
       send self(), {:mix_shell_input, :yes?, true}
       send self(), {:mix_shell_input, :prompt, "hunter42"}
@@ -61,7 +61,7 @@ defmodule Mix.Tasks.Hex.PublishTest do
 
     in_tmp fn ->
       Hex.State.put(:home, tmp_path())
-      setup_auth("user", "hunter42")
+      setup_auth("user@example.com", "hunter42")
 
       send self(), {:mix_shell_input, :prompt, "hunter42"}
       Mix.Tasks.Hex.Publish.run(["docs", "--no-progress"])
@@ -78,7 +78,7 @@ defmodule Mix.Tasks.Hex.PublishTest do
 
     in_tmp fn ->
       Hex.State.put(:home, tmp_path())
-      setup_auth("user", "hunter42")
+      setup_auth("user@example.com", "hunter42")
 
       send self(), {:mix_shell_input, :prompt, "hunter42"}
       Mix.Tasks.Hex.Publish.run(["docs", "--no-progress"])
@@ -95,7 +95,7 @@ defmodule Mix.Tasks.Hex.PublishTest do
 
     in_tmp fn ->
       Hex.State.put(:home, tmp_path())
-      setup_auth("user", "hunter42")
+      setup_auth("user@example.com", "hunter42")
 
       raised_message = """
       Invalid arguments, expected one of:
@@ -130,7 +130,7 @@ defmodule Mix.Tasks.Hex.PublishTest do
 
     in_tmp fn ->
       Hex.State.put(:home, tmp_path())
-      setup_auth("user", "hunter42")
+      setup_auth("user@example.com", "hunter42")
 
       send self(), {:mix_shell_input, :yes?, true}
       send self(), {:mix_shell_input, :prompt, "hunter42"}
@@ -146,7 +146,7 @@ defmodule Mix.Tasks.Hex.PublishTest do
 
     in_tmp fn ->
       Hex.State.put(:home, tmp_path())
-      setup_auth("user", "hunter42")
+      setup_auth("user@example.com", "hunter42")
 
       Mix.Tasks.Deps.Get.run([])
 
@@ -171,7 +171,7 @@ defmodule Mix.Tasks.Hex.PublishTest do
 
     in_tmp fn ->
       Hex.State.put(:home, tmp_path())
-      setup_auth("user", "hunter42")
+      setup_auth("user@example.com", "hunter42")
 
       error_msg = "Stopping package build due to errors.\n" <>
                   "Missing files: missing.txt, missing/*"

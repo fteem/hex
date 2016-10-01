@@ -21,7 +21,7 @@ defmodule Mix.Tasks.Hex.DocsTest do
 
     docs_home = :home |> Hex.State.fetch!() |> Path.join("docs")
 
-    auth = HexTest.HexWeb.new_key([user: "user", pass: "hunter42"])
+    auth = HexTest.HexWeb.new_key([email: "user@mail.com", pass: "hunter42"])
     HexTest.HexWeb.new_package(package, old_version, %{}, %{}, auth)
     HexTest.HexWeb.new_package(package, latest_version, %{}, %{}, auth)
 
